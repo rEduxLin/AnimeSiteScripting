@@ -137,9 +137,7 @@
         color: #fff;
         padding: 1em;
         border-radius: 0.8em;
-        /* display: none; */
         width: 22em;
-        /* text-align: center; */
         z-index: 1000;
         box-shadow: 0.2em 0.2em 1em rgb(0, 0, 0, 0.7);
         pointer-events: none;
@@ -160,7 +158,7 @@
       }
 
       .AmbrTooltip .subName {
-        font-family: "Open Sans";
+        /* font-family: "Open Sans"; */
         position: relative;
         display: flex;
         gap: 0.3em;
@@ -190,6 +188,55 @@
         float: left;
       }
 
+      .AmbrTooltip .talent {
+        position: relative;
+        height: 100%;
+        width: 100%;
+      }
+
+      .AmbrTooltip .talentIcon {
+        position: absolute;
+        height: 70%;
+        width: 70%;
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%);
+      }
+
+      .AmbrTooltip .talent svg {
+        position: absolute;
+        width: 98%;
+        height: 98%;
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%);
+        opacity: 0.8;
+        color: #00000090;
+      }
+
+      .AmbrTooltip .Rock svg {
+        color: #4a3a1890 !important;
+      }
+      .AmbrTooltip .Wind svg {
+        color: #1d4d4790 !important;
+      }
+      .AmbrTooltip .Ice svg {
+        color: #193d4390 !important;
+      }
+      .AmbrTooltip .Water svg {
+        color: #18293e90 !important;
+      }
+      .AmbrTooltip .Electric svg {
+        color: #34123b90 !important;
+      }
+      .AmbrTooltip .Fire svg {
+        color: #54190090 !important;
+      }
+      .AmbrTooltip .Grass svg {
+        color: #13451790 !important;
+      }
+      
+
       .AmbrTooltip .tag {
         padding: 0.2em 0.4em;
         color: rgb(255, 255, 255, 0.9);
@@ -213,6 +260,17 @@
         flex-grow: 1;
         overflow: hidden;
         min-height: 0; 
+      }
+
+      .AmbrTooltip .arrowDown {
+        position: absolute;
+        height: 1.1rem;
+        width: 1.1rem;
+        fill: white;
+        bottom: 0.15em;
+        left: 50%;
+        transform: translateX(-50%);
+        display: none;
       }
 
       .AmbrTooltip .title {
@@ -282,24 +340,6 @@
         font-family: "Open Sans";
         font-size: 0.7em;
         opacity: 0.7;
-      }
-
-
-      .dots::after {
-        content: '.';
-        animation: dots 1.5s steps(3, end) infinite;
-      }
-
-      @keyframes dots {
-        0% {
-          content: '.';
-        }
-        33% {
-          content: '..';
-        }
-        66% {
-          content: '...';
-        }
       }
 
     </style>
@@ -469,6 +509,17 @@
         function hideTooltip(tooltip) {
           tooltip.style.display = "none";
         }
+
+        function setScrollArrowState(scrollContent, arrowDown) {
+          scrollContent = ambrModule.querySelector(".scrollContent")
+          arrowDown = ambrModule.querySelector(".arrowDown")
+          if (scrollContent.scrollHeight-scrollContent.offsetHeight == scrollContent.scrollTop) {
+            arrowDown.style.display = "none"
+          } else {
+            arrowDown.style.display = "block"
+          }
+        }
+
         const defaultLang = "EN"
         const apiUrl = {
           weaponCurve: () => `https://gi.yatta.moe/api/v2/static/weaponCurve`,
@@ -478,6 +529,19 @@
           uiReliquary: (iconName) => `https://gi.yatta.moe/assets/UI/reliquary/${iconName}.png`,
           talent: (avatarId, lang=defaultLang) => `https://gi.yatta.moe/api/v2/${lang}/avatar/${avatarId}`,
         };
+
+        const svg = {
+          keyboardArrowDown: `
+            <svg class="arrowDown" version="1.1" xmlns="http://www.w3.org/2000/svg" width="768" height="768" viewBox="0 0 768 768">
+              <path d="M236.993 265.498l147 147 147-147 45 45-192 192-192-192z"></path>
+            </svg>
+          `,
+          circl: `
+            <svg class="circl" version="1.1" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14">
+              <defs><linearGradient xlink:href=\"#linearGradient826\" id=\"a\" x1=\"7.03\" x2=\"7.03\" y1=\"1.455\" y2=\"12.322\" gradientTransform=\"matrix(.80836 0 0 .82012 1.247 1.345)\" gradientUnits=\"userSpaceOnUse\"><stop offset=\"0\" style=\"stop-color:currentColor;stop-opacity:0\"/><stop offset=\".446\" style=\"stop-color:currentColor;stop-opacity:.80000001\"/><stop offset=\".548\" style=\"stop-color:currentColor;stop-opacity:.80000001\"/><stop offset=\"1\" style=\"stop-color:currentColor;stop-opacity:0\"/></linearGradient><linearGradient id=\"b\" x1=\"7.03\" x2=\"7.03\" y1=\"1.794\" y2=\"12.257\" gradientTransform=\"translate(1.239 1.243) scale(.82247)\" gradientUnits=\"userSpaceOnUse\"><stop offset=\"0\" style=\"stop-color:#fff;stop-opacity:0\"/><stop offset=\".446\" style=\"stop-color:#fff;stop-opacity:.7\"/><stop offset=\".548\" style=\"stop-color:#fff;stop-opacity:.7\"/><stop offset=\"1\" style=\"stop-color:#fff;stop-opacity:0\"/></linearGradient></defs><g style=\"display:inline\"><path d=\"M6.998 1.638c2.778 0 5.056 2.197 5.266 4.963.01.137-.447.433-.447.433s.457.287.445.435c-.226 2.748-2.497 4.893-5.264 4.893-2.779 0-5.077-2.162-5.289-4.925-.01-.138.444-.418.444-.418s-.455-.275-.444-.41c.209-2.77 2.508-4.971 5.289-4.971z\" style=\"opacity:1;fill:url(#a);fill-opacity:1;stroke-width:20.1392;-inkscape-stroke:none;paint-order:stroke markers fill\"/><path d=\"M6.713 1.638C3.972 1.766 1.82 3.695 1.483 6.3a5.036 5.036 0 0 1-.075-.11s-.786.828-1.451.828c.67 0 1.45.83 1.45.83s.03-.047.076-.112c.338 2.607 2.5 4.507 5.25 4.625-2.657-.138-4.816-2.284-5.023-4.925.17-.208.38-.418.526-.418-.147 0-.355-.209-.526-.417.207-2.645 2.366-4.824 5.023-4.964h-.02zm.56 0c2.655.138 4.78 2.317 4.986 4.962-.174.213-.388.434-.538.434.15 0 .363.218.536.43-.217 2.63-2.336 4.762-4.983 4.898 2.739-.117 4.866-2.002 5.211-4.594l.064.095s.786-.83 1.451-.83c-.206 0-.423-.078-.624-.186a3.772 3.772 0 0 1-.827-.642s-.024.039-.06.091c-.335-2.61-2.467-4.54-5.217-4.658Z\" style=\"fill:url(#b);stroke-width:19.7069;-inkscape-stroke:none;paint-order:stroke markers fill\"/></g>
+            </svg>
+          `
+        }
 
         const reliquarySuit = {
             EQUIP_BRACER: {
@@ -631,6 +695,7 @@
             const index = item.index ? item.index : 0
             const talent = data.data.talent[index]
             const charName = data.data.name 
+            const element = data.data.element
             let multiplyers = [["Talent Level", level]]
             if (talent.promote) {
               const params = talent.promote[level].params
@@ -650,6 +715,7 @@
               charName,
               level,
               multiplyers,
+              element,
             }
           }
         }
@@ -661,7 +727,10 @@
                 <div class="header">
                   <div class="icon" style="background-image: url(${data.icon})"></div>
                   <div class="name"><span>${data.name}</span></div>
-                  <div class="subName"><div class="reliquaryIcon" style="background-image: url(${apiUrl.ui(reliquarySuit[data.suit].uiIcon)})"></div><span>${reliquarySuit[data.suit].name}</span></div>
+                  <div class="subName">
+                    <div class="reliquaryIcon" style="background-image: url(${apiUrl.ui(reliquarySuit[data.suit].uiIcon)})"></div>
+                    <span>${reliquarySuit[data.suit].name}</span>
+                  </div>
                 </div>
                 <div class="scrollContent">
                   ${data.affixList.map((description, index) => `
@@ -676,9 +745,9 @@
                     <span>${data.lore}</span>
                   </div>
                 </div>
+                ${svg.keyboardArrowDown}
               </div>
               `;
-
           return html;
           }
 
@@ -708,6 +777,7 @@
                     <span>${data.lore}</span>
                   </div>
                 </div>
+                ${svg.keyboardArrowDown}
               </div>
               `;
               return html;
@@ -717,9 +787,15 @@
             const html = `
               <div class="AmbrTooltip">
                 <div class="header">
-                  <div class="icon" style="background-image: url(${data.icon})"></div>
-                  <div class="name"><span>${data.charName}</span></div>
-                  <div class="subName">${data.name}</div>
+                  <div class="icon">
+                    <div class="talent">
+                      ${svg.circl}
+                      <img class="talentIcon" src="${data.icon}">
+                    </div>
+                  </div>
+                  <div class="subName"><span>${data.charName}</span></div>
+                  <div class="name">${data.name}</div>
+                  <div class="tag-row"></div>
                 </div>
                 <div class="scrollContent">
                   <div class="description">${format(data.description)}</div>
@@ -734,6 +810,7 @@
                       ).join("\n")}
                   </div>`: ``}
                 </div>
+                ${svg.keyboardArrowDown}
               </div>
               `;
 
@@ -756,8 +833,9 @@
             try {
               abortState = new AbortController();
               const data = await fetchData(item.id, item.type, abortState);
-              formatedData = await DataFormat[item.type](data, item);
+              formatedData = DataFormat[item.type](data, item);
               ambrModule.innerHTML = ItemTemplate[item.type](formatedData);
+              setScrollArrowState()
               positionTooltip(lastMouseMove, ambrModule.querySelector("div.AmbrTooltip"));
             } catch (error) {
               console.log(error)
@@ -773,6 +851,7 @@
                 abortState.abort();
                 abortState = null;
               }
+              ambrModule.querySelector(".scrollContent").scrollTop = 0
               hideTooltip(ambrModule.querySelector("div.AmbrTooltip"));
             },
           );
@@ -794,6 +873,7 @@
               event.preventDefault()
               scrollContent = ambrModule.querySelector(".scrollContent")
               scrollContent.scrollTop += event.deltaY
+              setScrollArrowState()
             }
           )
         }
