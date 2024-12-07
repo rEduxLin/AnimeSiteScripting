@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
 
 @font-face {
-    font-family: "icomoon";
+    font-family: "ambrTTIcon";
     src: url("https://raw.githubusercontent.com/rEduxLin/AnimeSiteScripting/refs/heads/main/static/fonts/icomoon.eot?uliwvu");
     src: url("https://raw.githubusercontent.com/rEduxLin/AnimeSiteScripting/refs/heads/main/static/fonts/icomoon.eot?uliwvu#iefix") format("embedded-opentype"),
         url("https://raw.githubusercontent.com/rEduxLin/AnimeSiteScripting/refs/heads/main/static/fonts/icomoon.ttf?uliwvu") format("truetype"),
@@ -14,7 +14,7 @@
 
 [data-icon] {
     /* use !important to prevent issues with browser extensions that change fonts */
-    font-family: "icomoon" !important;
+    font-family: "ambrTTIcon" !important;
     speak: never;
     font-style: normal;
     font-weight: normal;
