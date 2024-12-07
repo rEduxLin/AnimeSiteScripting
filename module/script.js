@@ -260,7 +260,7 @@ async function fetchData(itemId, itemType, itemLang, abortController) {
 class DataFormat {
   static artifact(data, item) {
     const level = item.level ? clamp(item.level, 1, 20) : 20;
-    const suit = item.suit ? item.suit : "EQUIP_BRACER";
+    const suit = item.index ? Object.keys(reliquarySuit)[item.index] :Object.keys(reliquarySuit)[0];
     const lang = item.lang ? item.lang.toUpperCase() : defaultLang;
     const icon = data.data.suit[suit].icon;
     const affixList = Object.values(data.data.affixList);

@@ -12,7 +12,7 @@
     font-display: block;
 }
 
-[data-icon] {
+[data-icon][data-icon][data-icon][data-icon] {
     /* use !important to prevent issues with browser extensions that change fonts */
     font-family: "ambrTTIcon" !important;
     speak: never;
