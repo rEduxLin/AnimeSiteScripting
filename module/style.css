@@ -12,7 +12,7 @@
     font-display: block;
 }
 
-[data-icon][data-icon][data-icon][data-icon] {
+[att-data-icon]{
     /* use !important to prevent issues with browser extensions that change fonts */
     font-family: "ambrTTIcon" !important;
     speak: never;
@@ -27,91 +27,91 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
-[data-icon="FIGHT_PROP_DEFENSE"]:before {
+[att-data-icon="FIGHT_PROP_DEFENSE"]:before {
     content: "\e900";
 }
 
-[data-icon="FIGHT_PROP_DEFENSE_PERCENT"]:before {
+[att-data-icon="FIGHT_PROP_DEFENSE_PERCENT"]:before {
     content: "\e901";
 }
 
-[data-icon="FIGHT_PROP_ELEC_ADD_HURT"]:before {
+[att-data-icon="FIGHT_PROP_ELEC_ADD_HURT"]:before {
     content: "\e902";
 }
 
-[data-icon="FIGHT_PROP_ELEMENT_MASTERY"]:before {
+[att-data-icon="FIGHT_PROP_ELEMENT_MASTERY"]:before {
     content: "\e903";
 }
 
-[data-icon="FIGHT_PROP_FIRE_ADD_HURT"]:before {
+[att-data-icon="FIGHT_PROP_FIRE_ADD_HURT"]:before {
     content: "\e904";
 }
 
-[data-icon="FIGHT_PROP_GRASS_ADD_HURT"]:before {
+[att-data-icon="FIGHT_PROP_GRASS_ADD_HURT"]:before {
     content: "\e905";
 }
 
-[data-icon="FIGHT_PROP_HEAL_ADD"]:before {
+[att-data-icon="FIGHT_PROP_HEAL_ADD"]:before {
     content: "\e906";
 }
 
-[data-icon="FIGHT_PROP_HEALED_ADD"]:before {
+[att-data-icon="FIGHT_PROP_HEALED_ADD"]:before {
     content: "\e907";
 }
 
-[data-icon="FIGHT_PROP_HP"]:before {
+[att-data-icon="FIGHT_PROP_HP"]:before {
     content: "\e908";
 }
 
-[data-icon="FIGHT_PROP_HP_PERCENT"] {
+[att-data-icon="FIGHT_PROP_HP_PERCENT"] {
     content: "\e909";
 }
 
-[data-icon="FIGHT_PROP_ICE_ADD_HURT"]:before {
+[att-data-icon="FIGHT_PROP_ICE_ADD_HURT"]:before {
     content: "\e90c";
 }
 
-[data-icon="FIGHT_PROP_PHYSICAL_ADD_HURT"]:before {
+[att-data-icon="FIGHT_PROP_PHYSICAL_ADD_HURT"]:before {
     content: "\e90d";
 }
 
-[data-icon="FIGHT_PROP_ROCK_ADD_HURT"]:before {
+[att-data-icon="FIGHT_PROP_ROCK_ADD_HURT"]:before {
     content: "\e90e";
 }
 
-[data-icon="FIGHT_PROP_SHIELD_COST_MINUS_RATIO"]:before {
+[att-data-icon="FIGHT_PROP_SHIELD_COST_MINUS_RATIO"]:before {
     content: "\e90f";
 }
 
-[data-icon="FIGHT_PROP_WATER_ADD_HURT"]:before {
+[att-data-icon="FIGHT_PROP_WATER_ADD_HURT"]:before {
     content: "\e910";
 }
 
-[data-icon="FIGHT_PROP_WIND_ADD_HURT"]:before {
+[att-data-icon="FIGHT_PROP_WIND_ADD_HURT"]:before {
     content: "\e911";
 }
 
-[data-icon="FIGHT_PROP_ATTACK"]:before {
+[att-data-icon="FIGHT_PROP_ATTACK"]:before {
     content: "\e912";
 }
 
-[data-icon="FIGHT_PROP_ATTACK_PERCENT"]:before {
+[att-data-icon="FIGHT_PROP_ATTACK_PERCENT"]:before {
     content: "\e913";
 }
 
-[data-icon="FIGHT_PROP_BASE_ATTACK"]:before {
+[att-data-icon="FIGHT_PROP_BASE_ATTACK"]:before {
     content: "\e914";
 }
 
-[data-icon="FIGHT_PROP_CHARGE_EFFICIENCY"]:before {
+[att-data-icon="FIGHT_PROP_CHARGE_EFFICIENCY"]:before {
     content: "\e915";
 }
 
-[data-icon="FIGHT_PROP_CRITICAL"]:before {
+[att-data-icon="FIGHT_PROP_CRITICAL"]:before {
     content: "\e916";
 }
 
-[data-icon="FIGHT_PROP_CRITICAL_HURT"]:before {
+[att-data-icon="FIGHT_PROP_CRITICAL_HURT"]:before {
     content: "\e917";
 }
 
@@ -121,24 +121,6 @@
     font-weight: normal;
     font-style: normal;
     font-display: swap;
-}
-
-.item {
-    display: inline-block;
-    margin: 20px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    cursor: pointer;
-    background-color: #f5f5f5;
-    width: 175px;
-    text-align: center;
-    position: relative;
-}
-
-.item img {
-    height: 90%;
-    width: 90%;
 }
 
 .AmbrTooltip {
@@ -172,7 +154,7 @@
     text-align: left;
     position: relative;
     left: 0.15em;
-    margin-bottom: 0.3em;
+    padding-bottom: 0.3em;
     /* height: 3.5em; */
 }
 
@@ -185,6 +167,7 @@
     opacity: 0.7;
     left: 0.15em;
     top: -0.3em;
+    padding-top: 0.25em;
 
     .reliquaryIcon {
         width: 1.5em;
@@ -267,47 +250,47 @@
 }
 
 .AmbrTooltip.Rock {
-    --fade-color: rgba(74, 58, 24, 0.5);
+    --fade-color: rgba(78, 57, 12, 0.5);
 }
 
 .AmbrTooltip.Wind {
-    --fade-color: rgba(29, 77, 71, 0.5);
+    --fade-color: rgba(18, 95, 72, 0.5);
 }
 
 .AmbrTooltip.Ice {
-    --fade-color: rgba(25, 61, 67, 0.5);
+    --fade-color: rgba(13, 92, 102, 0.5);
 }
 
 .AmbrTooltip.Water {
-    --fade-color: rgba(43, 68, 99, 0.5);
+    --fade-color: rgba(10, 61, 124, 0.5);
 }
 
 .AmbrTooltip.Electric {
-    --fade-color: rgba(52, 18, 59, 0.5);
+    --fade-color: rgba(71, 16, 58, 0.5);
 }
 
 .AmbrTooltip.Fire {
-    --fade-color: rgba(83, 36, 16, 0.5);
+    --fade-color: rgba(90, 32, 8, 0.5);
 }
 
 .AmbrTooltip.Grass {
-    --fade-color: rgba(19, 69, 23, 0.5);
+    --fade-color: rgba(5, 48, 8, 0.5);
 }
 
 .AmbrTooltip.Rarity-1 {
-    --fade-color: rgba(182, 160, 150, 0.5);
+    --fade-color: rgba(73, 73, 73, 0.5);
 }
 
 .AmbrTooltip.Rarity-2 {
-    --fade-color: rgba(18, 143, 7, 0.5);
+    --fade-color: rgba(26, 58, 23, 0.5);
 }
 
 .AmbrTooltip.Rarity-3 {
-    --fade-color: rgba(43, 120, 207, 0.5);
+    --fade-color: rgba(9, 53, 104, 0.5);
 }
 
 .AmbrTooltip.Rarity-4 {
-    --fade-color: rgba(103, 49, 146, 0.5);
+    --fade-color: rgba(59, 35, 104, 0.5);
 }
 
 .AmbrTooltip.Rarity-5 {
@@ -365,6 +348,7 @@
     display: inline-block;
     flex-grow: 0;
     margin-top: -0.05em;
+    border-radius: 0.2em;
     padding: 0.1em 0.4em;
     align-self: flex-start;
 }
@@ -400,7 +384,9 @@
 }
 
 .AmbrTooltip hr {
-    opacity: 0.2;
+    opacity: 0.4;
+    color: white;
+    margin: 1em 0;
 }
 
 .AmbrTooltip .lore {

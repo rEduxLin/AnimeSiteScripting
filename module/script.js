@@ -39,25 +39,27 @@ function positionTooltip(event, tooltip) {
   const element = event.target;
   const rect = element.getBoundingClientRect();
   const viewportBottom =
-    window.innerHeight + document.documentElement.scrollTop;
+    window.outerHeight + document.documentElement.scrollTop;
   const viewportRight =
     document.documentElement.offsetWidth +
     document.documentElement.offsetLeft -
     document.documentElement.scrollLeft;
 
-  var left = event.clientX + 20;
+  var leftOffset = 20
+  var left = event.clientX + leftOffset;
   tooltip.style.left = left + "px";
 
   const tooltipRight = tooltip.offsetWidth + tooltip.offsetLeft;
   tooltip.style.left =
-    Math.min(viewportRight - tooltipRight + left, left) + "px";
+    Math.min(viewportRight - tooltipRight + left - leftOffset + 10, left) + "px";
 
-  var top = event.clientY - 70;
+  var topOffest = 70
+  var top = event.clientY + document.documentElement.scrollTop - topOffest ;
   tooltip.style.top = top + "px";
 
   const tooltipBottom = tooltip.offsetHeight + tooltip.offsetTop;
   tooltip.style.top =
-    Math.max(32, Math.min(viewportBottom - tooltipBottom + top, top)) + "px";
+    Math.max(32, Math.min(viewportBottom - tooltipBottom + top - topOffest - 30 , top)) + "px";
 }
 
 function hideTooltip(tooltip) {
@@ -137,7 +139,7 @@ const reliquarySuit = {
   },
 };
 
-talentTypeHash = {
+const talentTypeHash = {
   0: "1653327868",
   1: "4260972229",
   3: "2453877364",
@@ -148,7 +150,7 @@ talentTypeHash = {
   8: "2602723764",
 };
 
-romeNum = {
+const romeNum = {
   1: "I",
   2: "II",
   3: "III",
@@ -156,6 +158,14 @@ romeNum = {
   5: "V",
   6: "VI",
 };
+
+const weaponRarityMaxLevel = {
+  1: 70,
+  2: 70,
+  3: 90,
+  4: 90,
+  5: 90,
+}
 
 let isHovered = false;
 let abortState;
@@ -198,21 +208,23 @@ function format(text) {
 
 function formatParam(template, params) {
   return template.replace(
-    /\{param(\d+):([FI\d]*)(P?)\}/g,
-    (match, index, format, isPercent) => {
+    /\{param(\d+):([FIP\d]*)\}/g,
+    (match, index, format) => {
       const paramValue = params[parseInt(index) - 1];
       if (paramValue === undefined) return match;
 
       let formattedValue = paramValue;
       if (format.startsWith("F")) {
         const decimalPlaces = parseInt(format.slice(1)) || 0;
-        if (isPercent)
+        if (format.includes("P"))
           formattedValue = (paramValue * 100).toFixed(decimalPlaces);
         else formattedValue = paramValue.toFixed(decimalPlaces);
       } else if (format === "I") {
         formattedValue = Math.round(paramValue);
+      } else if (format === "P") {
+        formattedValue = (paramValue * 100).toFixed(0);
       }
-      if (isPercent) {
+      if (format.includes("P")) {
         formattedValue += "%";
       }
       return formattedValue;
@@ -260,7 +272,8 @@ async function fetchData(itemId, itemType, itemLang, abortController) {
 class DataFormat {
   static artifact(data, item) {
     const level = item.level ? clamp(item.level, 1, 20) : 20;
-    const suit = item.index ? Object.keys(reliquarySuit)[item.index] :Object.keys(reliquarySuit)[0];
+    const suit = item.index ? Object.keys(reliquarySuit)[item.index] : Object.keys(reliquarySuit)[0];
+    console.log(suit, item.index)
     const lang = item.lang ? item.lang.toUpperCase() : defaultLang;
     const icon = data.data.suit[suit].icon;
     const affixList = Object.values(data.data.affixList);
@@ -280,8 +293,9 @@ class DataFormat {
   }
 
   static weapon(data, item) {
-    const level = item.level ? clamp(item.level, 1, 90) : 90;
-    const refine = item.refine ? clamp(item.refine, 1, 5) : 1;
+    const rarity = data.data.rank
+    const level = item.level ? clamp(item.level, 1, weaponRarityMaxLevel[rarity]) : weaponRarityMaxLevel[rarity]
+    const refine = item.index ? clamp(item.index, 1, 5) : 1;
     const lang = item.lang ? item.lang.toUpperCase() : defaultLang;
     let promote = item.promote;
     if (!promote) {
@@ -299,13 +313,13 @@ class DataFormat {
     const base_atk =
       data.data.upgrade.prop[0].initValue *
       curveData.data[level].curveInfos[data.data.upgrade.prop[0].type];
-    const affix = {
+    const affix = data.data.affix ? {
       name: Object.values(data.data.affix)[0].name,
       description: format(
         Object.values(data.data.affix)[0].upgrade[refine - 1]
       ),
       refine: refine,
-    };
+    } : undefined;
     const main_stat = {
       type: data.data.upgrade.prop[1].propType,
       value:
@@ -316,7 +330,7 @@ class DataFormat {
     return {
       name: data.data.name,
       type: data.data.type,
-      rarity: data.data.rank,
+      rarity: rarity,
       icon: apiUrl.ui(data.data.icon),
       level: `${locData[lang]["level"]} ${level}`,
       affix: affix,
@@ -327,8 +341,8 @@ class DataFormat {
   }
 
   static talent(data, item) {
-    const level = item.level ? clamp(item.level, 1, 15) : 8;
-    const index = item.index ? item.index : 0;
+    const level = item.level ? clamp(parseInt(item.level), 1, 15) : 8;
+    const index = item.index ? parseInt(item.index) : 0;
     const lang = item.lang ? item.lang.toUpperCase() : defaultLang;
     const talent = data.data.talent[index];
     const charName = data.data.name;
@@ -345,10 +359,12 @@ class DataFormat {
       });
     }
 
+    const tags = [];
     const talentType = locData[lang][talentTypeHash[index]];
-    const talentlevel = `${locData[lang]["level"]} ${level}`;
-    const tags = [talentType, talentlevel];
-    // const regex = RegExp(`^(${locData[lang][talentTypeHash[index]]}\\.)`);
+    if (talentType) tags.push(talentType);
+    const talentlevel = [0,1,3].includes(index) ? `${locData[lang]["level"]} ${level}`: undefined;
+    console.log(talentlevel)
+    if (talentlevel) tags.push(talentlevel);
     const name = talent.name.startsWith(talentType)
       ? talent.name.slice(talentType.length + 2)
       : talent.name;
@@ -366,11 +382,11 @@ class DataFormat {
 
   static constellation(data, item) {
     const lang = item.lang ? item.lang.toUpperCase() : defaultLang;
-    const index = item.index ? parseInt(item.index) : 0;
-    const constellation = data.data.constellation[index];
+    const index = item.index ? parseInt(item.index) : 1;
+    const constellation = data.data.constellation[index-1];
     const charName = data.data.name;
     const element = data.data.element;
-    const talentTag = locData[lang]["constellation"] + ` ${romeNum[index + 1]}`;
+    const talentTag = locData[lang]["constellation"] + ` ${romeNum[index]}`;
     const tags = [talentTag];
 
     return {
@@ -392,13 +408,13 @@ class ItemTemplate {
               <div class="icon" style="background-image: url(${
                 data.icon
               })"></div>
-              <div class="name"><span>${data.name}</span></div>
               <div class="subName">
-                <div class="reliquaryIcon" style="background-image: url(${
-                  data.suitIcon
+              <div class="reliquaryIcon" style="background-image: url(${
+                data.suitIcon
                 })"></div>
                 <span>${data.suitName}</span>
-              </div>
+                </div>
+              <div class="name"><span>${data.name}</span></div>
             </div>
             <div class="scrollContent">
               ${data.affixList
@@ -436,24 +452,27 @@ class ItemTemplate {
                   <span>${data.level}</span>    
                 </div>
                 <div class="tag">
-                  <i data-icon="FIGHT_PROP_ATTACK"></i> <span>${formatStat(
+                  <i att-data-icon="FIGHT_PROP_ATTACK"></i> <span>${formatStat(
                     "FIGHT_PROP_ATTACK",
                     data.base_atk
                   )}</span>
                 </div>
+                ${data.main_stat.value ? `
                 <div class="tag">
-                  <i data-icon="${data.main_stat.type}"></i> <span>${formatStat(
-      data.main_stat.type,
-      data.main_stat.value
-    )}</span>
-                </div>
+                  <i att-data-icon="${data.main_stat.type}"></i> <span>${formatStat(
+                    data.main_stat.type,
+                    data.main_stat.value
+                  )}</span>
+                </div>`: ``}
               </div>
             </div>
             <div class="scrollContent">
-              <div class="title">${data.affix.name}<span style="color:wheat">R${
-      data.affix.refine
-    }</span></div>
-              <div class="description">${format(data.affix.description)}</div>
+                ${data.affix ? `
+                  <div class="title">${data.affix.name}<span style="color:wheat">R${
+                  data.affix.refine
+                }</span></div>
+                <div class="description">${format(data.affix.description)}</div>
+                ` : ``}
               <hr>
               <div class="lore">
                 <span>${data.lore}</span>
@@ -492,7 +511,7 @@ class ItemTemplate {
             <div class="scrollContent">
               <div class="description">${format(data.description)}</div>
                 ${
-                  data.multiplyers
+                  data.multiplyers.length != 0
                     ? `
                 <hr>
                 <div class="table">
@@ -555,8 +574,6 @@ function attachAmbrTooltipEventListener(element) {
     id: element.getAttribute("data-gi-id"),
     type: element.getAttribute("data-gi-type"),
     level: element.getAttribute("data-gi-level"),
-    refine: element.getAttribute("data-gi-refine"),
-    suit: element.getAttribute("data-gi-suit"),
     index: element.getAttribute("data-gi-index"),
     lang: element.getAttribute("data-gi-lang"),
   };
@@ -615,7 +632,7 @@ function scanAndAttachTooltipEvents() {
   });
 }
 
-ambrModule = createAmbrModule();
+var ambrModule = createAmbrModule();
 
 scanAndAttachTooltipEvents();
 const observer = new MutationObserver(() => {
